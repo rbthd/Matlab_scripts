@@ -2,7 +2,7 @@ clc; %reset command window
 clear all; %reset variables
 %results=importdata('test_position_settings2.csv', ' ');
 %results=importdata('/Volumes/Home Directory/instantWave/minimu9/tests/test3.csv', ' ');
-results=importdata('/Users/robintherond/Documents/Polytech/PIFE/Pololu/Tests/test_desk_unmoving.csv', ' ');
+results=importdata('/Users/robintherond/Documents/Polytech/PIFE/instantWave/Tests/test_WAVE_robot.csv', ' ');
 
 %% Plotting stat from Euler angles 
 scrsz = get(groot,'ScreenSize');
@@ -84,15 +84,24 @@ end
 figure('Name' ,'Magnitude of acceleration vector','Position',[1 scrsz(4)/2 scrsz(4) scrsz(4)]);
 subplot(221);
 plot(x,mag_acc);
+xlabel('Samples');
+ylabel('Amplitude of Acceleration vector');
 subplot(222);
 [mu,s,muci,sci] = normfit(mag_acc);
 normal_acc = normpdf(mag_acc,mu, s);
+max_normal_acc = max(normal_acc)
+for i=1:1:size
+    normal_acc(i,1) = normal_acc(i,1)/max_normal_acc;
+end
 scatter(mag_acc,normal_acc,'.');
-subplot(223);
-norm_acc_avg=mean(mag_acc)
-std_deviation=std(mag_acc)
+xlabel('Amplitude of Acceleration vector');
+ylabel('Normalized Density of probability');
+norm_acc_avg=mean(mag_acc);
+std_deviation=std(mag_acc);
+dim = [.4 .82 .1 .1];
 str={'Average = ' num2str(norm_acc_avg),'Standard deviation = ' num2str(std_deviation)};
 annotation('textbox',dim,'String',str , 'FitBoxToText','on');
+
 
 
 

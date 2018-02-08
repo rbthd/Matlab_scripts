@@ -2,7 +2,7 @@
 
 clc; %reset command window
 clearvars; %reset variables
-results=importdata('/Users/robintherond/Documents/Polytech/PIFE/instantWave/Tests/test_robot_cut.csv', ' ');
+results=importdata('/Users/robintherond/Documents/Polytech/PIFE/instantWave/Tests/test_robot.csv', ' ');
 
 %Global variables
 samplePeriod = 0.02; %s
