@@ -1,13 +1,14 @@
 clc; %reset command window
 clear all; %reset variables
-%results=importdata('test_position_settings2.csv', ' ');
-%results=importdata('/Volumes/Home Directory/instantWave/minimu9/tests/test3.csv', ' ');
-results=importdata('/Users/robintherond/Documents/Polytech/PIFE/instantWave/Tests/test_WAVE_robot.csv', ' ');
+results=importdata('/Users/robintherond/Documents/Polytech/PIFE/instantWave/Tests/test_nonMoving2.csv', ' ');
+
+%The column number might vary depending on the csv
+%file you use. Verify the order if you use data from
+%another program than minimu9-ahrs in 'all' mode.
 
 %% Plotting stat from Euler angles 
 scrsz = get(groot,'ScreenSize');
 figure('Name' ,'Normal distribution of Euler Angles','Position',[1 scrsz(4)/2 scrsz(4) scrsz(4)]);
-
 subplot(321);
 [mu,s,muci,sci] = normfit(results(:,23));
 norm_yaw = normpdf(results(:,23),mu, s);
@@ -38,7 +39,7 @@ annotation('textbox',dim,'String',str , 'FitBoxToText','on');
 title('ROLL');
 xlabel('degrees');
 
-%% Plotting stat from Euler angles 
+%% Plotting stat from Accelerometers  
 
 subplot(322);
 [mu,s,muci,sci] = normfit(results(:,26));
@@ -88,12 +89,12 @@ xlabel('Samples');
 ylabel('Amplitude of Acceleration vector');
 subplot(222);
 [mu,s,muci,sci] = normfit(mag_acc);
-normal_acc = normpdf(mag_acc,mu, s);
-max_normal_acc = max(normal_acc)
+normal_mag = normpdf(mag_acc,mu, s);
+max_normal_acc = max(normal_mag)
 for i=1:1:size
-    normal_acc(i,1) = normal_acc(i,1)/max_normal_acc;
+    normal_mag(i,1) = normal_mag(i,1)/max_normal_acc;
 end
-scatter(mag_acc,normal_acc,'.');
+scatter(mag_acc,normal_mag,'.');
 xlabel('Amplitude of Acceleration vector');
 ylabel('Normalized Density of probability');
 norm_acc_avg=mean(mag_acc);
@@ -129,4 +130,59 @@ str={'Average = ' num2str(norm_acc_avg),'Standard deviation = ' num2str(std_devi
 annotation('textbox',dim,'String',str , 'FitBoxToText','on');
 
 
+%% Plotting stat from Gyrometers  
+x=1:1:length(results(:,29));
+figure('Name','Stats from gyrometers','Position',[1 scrsz(4)/2 scrsz(4) scrsz(4)])
+subplot(321);
+[mu,s,muci,sci] = normfit(results(:,29));
+norm_gyr_x = normpdf(results(:,29),mu, s);
+plot(results(:,29),norm_gyr_x,'.');
+dim = [.37 .8 .1 .1];
+str={'Average = ' num2str(mu),'Standard deviation = ' num2str(s)};
+annotation('textbox',dim,'String',str , 'FitBoxToText','on');
+title('GYROMETER X');
+xlabel('°/s');
+ylabel('Density of probability');
+subplot(322)
+scatter(x,results(:,29))
+title('GYROMETER X');
+xlabel('samples');
+ylabel('°/s');
 
+
+subplot(323);
+[mu,s,muci,sci] = normfit(results(:,30));
+norm_gyr_y = normpdf(results(:,30),mu, s);
+plot(results(:,30),norm_gyr_y,'.');
+dim = [.37 .5 .1 .1];
+str={'Average = ' num2str(mu),'Standard deviation = ' num2str(s)};
+annotation('textbox',dim,'String',str , 'FitBoxToText','on');
+xlabel('°/s');
+ylabel('Density of probability');
+title('GYROMETER Y');
+
+subplot(324)
+scatter(x,results(:,30))
+xlabel('samples');
+ylabel('°/s');
+title('GYROMETER Y');
+
+subplot(325);
+[mu,s,muci,sci] = normfit(results(:,31));
+norm_gyr_z = normpdf(results(:,31),mu, s);
+plot(results(:,31),norm_gyr_z,'.');
+dim = [.37 .2 .1 .1];
+str={'Average = ' num2str(mu),'Standard deviation = ' num2str(s)};
+annotation('textbox',dim,'String',str , 'FitBoxToText','on');
+title('GYROMETER Z');
+
+xlabel('°/s');
+ylabel('Density of probability');
+subplot(326)
+scatter(x,results(:,31))
+title('GYROMETER Z');
+xlabel('samples');
+ylabel('°/s');
+
+title('GYROMETER Z');
+xlabel('°/s');
